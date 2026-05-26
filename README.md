@@ -9,5 +9,4 @@
 
 ## Topic
 
-Retail Sector Performance Across Australian States:
-Identifying Growth Industries in the Post-Pandemic Era (2020–2025)
+Which retail industries and states drove Australia's post-pandemic recovery between 2020 and 2025?
