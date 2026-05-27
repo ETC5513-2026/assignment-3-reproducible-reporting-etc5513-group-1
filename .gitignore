@@ -1,6 +1,18 @@
+# macOS
 .DS_Store
+
+# R session files
 .Rhistory
+.Rapp.history
 .RData
+.Ruserdata
+
+# RStudio
 .Rproj.user/
+
+# Quarto / knitr
 *_files/
 *_cache/
+
+# logs
+*.log
