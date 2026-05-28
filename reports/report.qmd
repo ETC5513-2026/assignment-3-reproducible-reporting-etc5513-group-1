@@ -1,0 +1,118 @@
+<<<<<<< Updated upstream
+=======
+---
+title: "Retail Sector Performance Across Australian States: Identifying Growth Industries in the Post-Pandemic Era (2020–2025)"
+
+author:
+  - "Shixu Xiao"
+  - "Anali Nanayakkara Palliya Guruge"
+  - "Tiansi Zhu"
+  - "Sum Yee Chong"
+
+format:
+  typst:
+    toc: true
+    toc-depth: 2
+    number-sections: true
+    papersize: a4
+    margin:
+      x: 2.5cm
+      y: 2.5cm
+
+execute:
+  echo: false
+  warning: false
+  message: false
+  include: false
+
+knitr:
+  opts_chunk:
+    fig.path: ../figures/
+
+bibliography: references.bib
+---
+
+# Executive Summary
+
+# Introduction
+
+
+The Australian retail sector experienced substantial disruption during the COVID-19 pandemic, followed by uneven recovery patterns across states and retail industries. Changes in consumer behaviour, reopening policies, labour market conditions, and inflation contributed to significant variation in retail turnover between 2020 and 2025. Understanding which industries recovered most strongly is important for businesses, policymakers, and investors seeking to identify emerging growth opportunities in the post-pandemic economy.
+
+This report analyses seasonally adjusted retail turnover data published by the Australian Bureau of Statistics (ABS), covering multiple Australian states and retail industry subgroups. Using reproducible workflows implemented in Quarto and R, the report examines differences in retail performance across regions and industries during the post-pandemic recovery period.
+
+Preliminary analysis suggests that retail recovery patterns differed substantially across states, with Victoria and Western Australia recording some of the strongest growth rates between 2020 and 2025. Industry-level analysis indicates particularly strong growth in cafes, restaurants, takeaway food services, clothing retailing, and personal accessory retailing. These findings provide insight into structural changes in Australian consumer spending and highlight sectors that demonstrated strong post-pandemic resilience.
+
+# Methodology
+
+```{r}
+#| label: data-cleaning
+
+library(readxl)
+library(tidyverse)
+library(knitr)
+
+retail_names <- read_excel(
+  "../data/Retail turnover, state by industry subgroup, seasonally adjusted.xlsx",
+  sheet = "Data1",
+  n_max = 1,
+  col_names = FALSE
+)
+```
+```{r}
+retail_raw <- read_excel(
+  "../data/Retail turnover, state by industry subgroup, seasonally adjusted.xlsx",
+  sheet = "Data1",
+  skip = 10,
+  col_names = FALSE
+)
+```
+```{r}
+names(retail_raw) <- as.character(retail_names[1, ])
+names(retail_raw)[1] <- "Date"
+retail_raw <- retail_raw[, !is.na(names(retail_raw))]
+```
+```{r}
+retail_long <- retail_raw |>
+  pivot_longer(
+    cols = -Date,
+    names_to = "series",
+    values_to = "turnover"
+  )
+```
+
+```{r}
+retail_clean <- retail_long |>
+  separate(
+    series,
+    into = c("measure", "state", "industry"),
+    sep = ";"
+  ) |>
+  mutate(
+    Date = as.Date(Date),
+    state = str_trim(state),
+    industry = str_trim(industry),
+    industry = str_replace(
+      industry,
+      "Furniture, floor coverings, houseware and textile goods retailing",
+      "Furniture and houseware retailing"
+    )
+  ) |>
+  filter(
+    Date >= as.Date("2020-01-01"),
+    Date <= as.Date("2025-05-01"),
+    state != "Total (State)",
+    industry != "Total (Industry)",
+    !is.na(turnover)
+  )
+```
+
+
+
+
+# Results
+
+# Discussion and Conclusion
+
+# References
+>>>>>>> Stashed changes
