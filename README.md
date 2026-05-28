@@ -5,7 +5,7 @@
 - Shixu Xiao
 - Anali Nanayakkara Palliya Guruge
 - Tiansi Zhu
-- Sum Chong
+- Sum Yee Chong
 
 ## Topic
 
