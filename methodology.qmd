@@ -10,6 +10,14 @@ execute:
 
 ## Methodology
 
+Monthly retail turnover data were obtained from the Australian Bureau of Statistics (ABS) *Retail Trade, Australia* release (Cat. No. 8501.0, Table 12), which tracks seasonally adjusted turnover figures broken down by state and industry subgroup. This publication is updated monthly and freely accessible via abs.gov.au, with the current release extending through May 2025, making it a reliable source for examining recent retail trends across Australia.
+
+The dataset captures turnover in millions of Australian dollars across all eight states and territories — New South Wales, Victoria, Queensland, South Australia, Western Australia, Tasmania, the Northern Territory, and the Australian Capital Territory — and spans thirteen retail industry subgroups, ranging from supermarkets and grocery stores to cafes, clothing retailers, and household goods outlets. Given the study's focus on post-pandemic recovery, only observations from January 2020 onward were retained, providing a window that encompasses both the acute disruption phase of COVID-19 and the subsequent recovery period through to May 2025.
+
+The raw data arrived in wide format, with each column encoding a distinct state-industry combination. Column labels were extracted from the first row and reassigned before the table was pivoted into long format via the `tidyverse` package in R; state and industry identifiers were then isolated from the original series strings using the `separate()` function. National aggregate rows and records with missing values were excluded to ensure the analysis reflected state-level patterns only. Industry labels were also simplified where necessary to improve readability.
+
+All visualisations were produced using `ggplot2` and tables were rendered with `knitr`. \@tbl-summary lists the ten state-industry combinations with the highest average monthly turnover, offering a snapshot of which segments consistently dominated retail activity. \@fig-trend traces how turnover evolved across three key industry subgroups between 2020 and 2025, highlighting divergent recovery trajectories in the post-pandemic period.
+
 ```{r}
 #| label: data-cleaning
 
