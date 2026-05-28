@@ -1,11 +1,12 @@
----
+
 title: "Retail Sector Performance Across Australian States: Identifying Growth Industries in the Post-Pandemic Era (2020–2025)"
 
 author:
   - "Shixu Xiao"
   - "Anali Nanayakkara Palliya Guruge"
   - "Tiansi Zhu"
-  - "Sum Chong"
+  - "Sum Yee Chong"
+
 
 format:
   typst:
@@ -128,6 +129,7 @@ retail_clean |>
     col.names = c("State", "Industry", "Average Turnover ($M)")
   )
 ```
+
 ```{r}
 #| label: fig-trend
 #| fig-cap: "Monthly retail turnover across selected industries in Australia, January 2020 to May 2025 (seasonally adjusted, AUD millions)"
@@ -161,8 +163,11 @@ retail_clean |>
   )
 ```
 
+
 # Results
 
 # Discussion and Conclusion
 
+
 # References
+
