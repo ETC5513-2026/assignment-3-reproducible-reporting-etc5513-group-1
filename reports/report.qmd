@@ -1,0 +1,44 @@
+---
+title: "Retail Sector Performance Across Australian States: Identifying Growth Industries in the Post-Pandemic Era (2020–2025)"
+
+author:
+  - "Shixu Xiao"
+  - "Anali Nanayakkara Palliya Guruge"
+  - "Tiansi Zhu"
+  - "Sum Chong"
+
+format:
+  typst:
+    toc: true
+    toc-depth: 2
+    number-sections: true
+    papersize: a4
+    margin:
+      x: 2.5cm
+      y: 2.5cm
+
+execute:
+  echo: false
+  warning: false
+  message: false
+
+knitr:
+  opts_chunk:
+    fig.path: ../figures/
+
+bibliography: references.bib
+---
+
+# Executive Summary
+
+# Introduction
+
+# Data
+
+# Methodology
+
+# Results
+
+# Discussion and Conclusion
+
+# References
