@@ -121,6 +121,38 @@ retail_clean |>
     col.names = c("State", "Industry", "Average Turnover ($M)")
   )
 ```
+```{r}
+#| label: fig-trend
+#| fig-cap: "Monthly retail turnover across selected industries in Australia, January 2020 to May 2025 (seasonally adjusted, AUD millions)"
+#| fig-width: 10
+#| fig-height: 4
+
+retail_clean |>
+  filter(
+    industry %in% c(
+      "Supermarket and grocery stores",
+      "Cafes, restaurants and takeaway food services",
+      "Clothing, footwear and personal accessory retailing"
+    )
+  ) |>
+  group_by(Date, industry) |>
+  summarise(
+    turnover = sum(turnover),
+    .groups = "drop"
+  ) |>
+  ggplot(aes(x = Date, y = turnover, colour = industry)) +
+  geom_line(linewidth = 0.8) +
+  facet_wrap(~ industry, scales = "free_y") +
+  labs(
+    x = "Date",
+    y = "Turnover ($ Millions)",
+  ) +
+  theme_minimal() +
+  theme(
+    legend.position = "bottom",
+    legend.text = element_text(size = 8)
+  )
+```
 
 # Results
 
