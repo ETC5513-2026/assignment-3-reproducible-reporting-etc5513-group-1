@@ -26,7 +26,7 @@ execute:
 
 knitr:
   opts_chunk:
-    fig.path: ../figures/
+    fig.path: figures/
 
 bibliography: references.bib
 ---
@@ -115,7 +115,7 @@ retail_clean <- retail_long |>
 ```{r}
 #| label: tbl-summary
 #| tbl-cap: "Top 10 state-industry combinations by average monthly retail turnover, 2020–2025 (AUD millions, seasonally adjusted)"
-
+#| include: true
 
 retail_clean |>
   group_by(state, industry) |>
@@ -135,6 +135,7 @@ retail_clean |>
 #| fig-cap: "Monthly retail turnover across selected industries in Australia, January 2020 to May 2025 (seasonally adjusted, AUD millions)"
 #| fig-width: 10
 #| fig-height: 4
+#| include: true
 
 retail_clean |>
   filter(
