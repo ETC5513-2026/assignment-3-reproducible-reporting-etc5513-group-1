@@ -19,6 +19,7 @@
 *_files/
 *_cache/
 .quarto/
+**/.quarto/
 
 # Typst / Quarto intermediate files
 *.typ
