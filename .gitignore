@@ -14,5 +14,9 @@
 *_files/
 *_cache/
 
+# generated intermediate files
+*.typ
+*.knit.md
+
 # logs
 *.log
