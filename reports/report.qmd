@@ -40,7 +40,7 @@ The COVID-19 pandemic caused substantial disruption to the Australian retail sec
 
 Understanding post-pandemic retail recovery is important because recovery patterns were uneven across both states and retail industries. Differences in reopening policies, labour market conditions, inflation, and consumer preferences contributed to varying levels of retail growth between 2020 and 2025.
 
-This report investigates which Australian states and retail industries contributed most strongly to post-pandemic retail recovery between 2020 and 2025. Using seasonally adjusted retail turnover data published by the Australian Bureau of Statistics (ABS), the report examines variation in retail performance across regions and industries during the recovery period.
+This report investigates which Australian states and retail industries contributed most strongly to post-pandemic retail recovery between 2020 and 2025. Using seasonally adjusted retail turnover data published by the Australian Bureau of Statistics, the report examines variation in retail performance across regions and industries during the recovery period.
 
 The remainder of this report is structured as follows. The methodology section describes the data preparation and analytical approach, followed by the results section presenting key findings and visualisations. The final section discusses the implications of the results and provides concluding remarks and recommendations.
 
