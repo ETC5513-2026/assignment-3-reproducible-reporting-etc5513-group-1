@@ -33,176 +33,7 @@ bibliography: references.bib
 # Executive Summary
 
 # Introduction
-```{r}
-library(readxl)
-library(dplyr)
-library(tidyr)
-library(stringr)
-library(lubridate)
-library(ggplot2)
-```
 
-```{r}
-retail_raw <- read_excel(
-  "../data/Retail turnover, state by industry subgroup, seasonally adjusted.xlsx",
-  sheet = "Data1",
-  col_names = FALSE
-)
-
-retail_raw |> 
-  slice(1:12)
-```
-
-```{r}
-# Extract the series names from the first row of the Excel file
-# Each column represents one retail time series
-series_names <- retail_raw[1, -1] |>
-  pivot_longer(
-    cols = everything(),
-    values_to = "series"
-  ) |>
-  pull(series)
-
-# Clean and reshape the raw ABS retail dataset
-retail_clean <- retail_raw[-(1:10), ] |>
-
-  # Rename the first column as Month
-  rename(Month = ...1) |>
-
-  # Convert the data from wide format to long format
-  pivot_longer(
-    cols = -Month,
-    names_to = "series_col",
-    values_to = "Turnover"
-  ) |>
-
-  # Create useful variables and clean values
-  mutate(
-
-    # Extract the column index number
-    series_index = as.integer(str_remove(series_col, "\\.\\.\\.")) - 1,
-
-    # Match each column with its retail series description
-    series = series_names[series_index],
-
-    # Convert Excel numeric dates into R Date format
-    Month = as.Date(as.numeric(Month), origin = "1899-12-30"),
-
-    # Convert turnover values into numeric format
-    Turnover = as.numeric(Turnover)
-  ) |>
-
-  # Split the series description into components
-  separate(
-    series,
-    into = c("Measure", "State", "Industry"),
-    sep = " ; ",
-    fill = "right"
-  ) |>
-
-  # Remove unnecessary white spaces
-  mutate(
-    across(c(Measure, State, Industry), str_trim)
-  ) |>
-
-  # Restrict the analysis period to post-pandemic years
-  filter(
-    Month >= as.Date("2020-01-01"),
-    Month <= as.Date("2025-05-01")
-  )
-
-# Inspect the cleaned dataset structure
-glimpse(retail_clean)
-```
-
-```{r}
-# Calculate total retail turnover by state
-state_summary <- retail_clean |>
-  group_by(State) |>
-  summarise(
-    Total_Turnover = sum(Turnover, na.rm = TRUE)
-  ) |>
-  arrange(desc(Total_Turnover))
-
-# Display the state-level summary
-state_summary
-```
-
-```{r}
-# Calculate average turnover by state and year
-state_growth <- retail_clean |>
-
-  # Keep only the years used for comparison
-  filter(year(Month) %in% c(2020, 2025)) |>
-
-  # Create a year variable
-  mutate(Year = year(Month)) |>
-
-  # Calculate average turnover for each state and year
-  group_by(State, Year) |>
-  summarise(
-    Avg_Turnover = mean(Turnover, na.rm = TRUE),
-    .groups = "drop"
-  ) |>
-
-  # Convert the data from long to wide format
-  pivot_wider(
-    names_from = Year,
-    values_from = Avg_Turnover,
-    names_prefix = "Turnover_"
-  ) |>
-
-  # Calculate percentage growth between 2020 and 2025
-  mutate(
-    Growth_Percent =
-      ((Turnover_2025 - Turnover_2020) /
-         Turnover_2020) * 100
-  ) |>
-
-  # Rank states by growth rate
-  arrange(desc(Growth_Percent))
-
-# Display the state growth comparison
-state_growth
-```
-
-```{r}
-# Calculate average turnover by industry and year
-industry_growth <- retail_clean |>
-
-  # Keep only 2020 and 2025 observations
-  filter(year(Month) %in% c(2020, 2025)) |>
-
-  # Create a year variable
-  mutate(Year = year(Month)) |>
-
-  # Calculate average turnover for each industry and year
-  group_by(Industry, Year) |>
-  summarise(
-    Avg_Turnover = mean(Turnover, na.rm = TRUE),
-    .groups = "drop"
-  ) |>
-
-  # Convert the data into wide format
-  pivot_wider(
-    names_from = Year,
-    values_from = Avg_Turnover,
-    names_prefix = "Turnover_"
-  ) |>
-
-  # Calculate percentage growth
-  mutate(
-    Growth_Percent =
-      ((Turnover_2025 - Turnover_2020) /
-         Turnover_2020) * 100
-  ) |>
-
-  # Rank industries by growth rate
-  arrange(desc(Growth_Percent))
-
-# Display industry growth comparison
-industry_growth
-```
 
 The Australian retail sector experienced substantial disruption during the COVID-19 pandemic, followed by uneven recovery patterns across states and retail industries. Changes in consumer behaviour, reopening policies, labour market conditions, and inflation contributed to significant variation in retail turnover between 2020 and 2025. Understanding which industries recovered most strongly is important for businesses, policymakers, and investors seeking to identify emerging growth opportunities in the post-pandemic economy.
 
@@ -211,6 +42,68 @@ This report analyses seasonally adjusted retail turnover data published by the A
 Preliminary analysis suggests that retail recovery patterns differed substantially across states, with Victoria and Western Australia recording some of the strongest growth rates between 2020 and 2025. Industry-level analysis indicates particularly strong growth in cafes, restaurants, takeaway food services, clothing retailing, and personal accessory retailing. These findings provide insight into structural changes in Australian consumer spending and highlight sectors that demonstrated strong post-pandemic resilience.
 
 # Methodology
+```{r}
+#| label: data-cleaning
+
+library(readxl)
+library(tidyverse)
+library(knitr)
+
+retail_names <- read_excel(
+  "../data/Retail turnover, state by industry subgroup, seasonally adjusted.xlsx",
+  sheet = "Data1",
+  n_max = 1,
+  col_names = FALSE
+)
+```
+```{r}
+retail_raw <- read_excel(
+  "../data/Retail turnover, state by industry subgroup, seasonally adjusted.xlsx",
+  sheet = "Data1",
+  skip = 10,
+  col_names = FALSE
+)
+```
+```{r}
+names(retail_raw) <- as.character(retail_names[1, ])
+names(retail_raw)[1] <- "Date"
+retail_raw <- retail_raw[, !is.na(names(retail_raw))]
+```
+
+```{r}
+retail_long <- retail_raw |>
+  pivot_longer(
+    cols = -Date,
+    names_to = "series",
+    values_to = "turnover"
+  )
+```
+
+```{r}
+retail_clean <- retail_long |>
+  separate(
+    series,
+    into = c("measure", "state", "industry"),
+    sep = ";"
+  ) |>
+  mutate(
+    Date = as.Date(Date),
+    state = str_trim(state),
+    industry = str_trim(industry),
+    industry = str_replace(
+      industry,
+      "Furniture, floor coverings, houseware and textile goods retailing",
+      "Furniture and houseware retailing"
+    )
+  ) |>
+  filter(
+    Date >= as.Date("2020-01-01"),
+    Date <= as.Date("2025-05-01"),
+    state != "Total (State)",
+    industry != "Total (Industry)",
+    !is.na(turnover)
+  )
+```
 
 # Results
 
