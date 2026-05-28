@@ -1,4 +1,5 @@
 # Operating system files
+
 # macOS
 .DS_Store
 
@@ -11,6 +12,9 @@
 # RStudio / Positron
 .Rproj.user/
 
+# VS Code / Positron
+.vscode/
+
 # Quarto / knitr cache
 *_files/
 *_cache/
@@ -19,9 +23,6 @@
 # Typst / Quarto intermediate files
 *.typ
 *.knit.md
-
-# Rendered outputs
-*.pdf
 
 # Logs
 *.log
