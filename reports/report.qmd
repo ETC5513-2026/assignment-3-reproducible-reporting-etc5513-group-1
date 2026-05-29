@@ -1,5 +1,3 @@
-<<<<<<< Updated upstream
-=======
 ---
 title: "Retail Sector Performance Across Australian States: Identifying Growth Industries in the Post-Pandemic Era (2020–2025)"
 
