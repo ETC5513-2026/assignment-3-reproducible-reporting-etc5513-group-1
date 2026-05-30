@@ -25,7 +25,7 @@ execute:
 
 knitr:
   opts_chunk:
-    fig.path: ../figures/
+    fig.path: figures/
 
 bibliography: references.bib
 ---
@@ -89,7 +89,7 @@ retail_clean <- retail_raw[-(1:10), ] |>
   separate(
     series,
     into = c("Measure", "State", "Industry"),
-    sep = " ; ",
+    sep = ";",
     fill = "right"
   ) |>
   mutate(
@@ -162,6 +162,58 @@ retail_clean |>
 ```
 
 # Results
+
+@fig-growth presents the percentage change in total retail turnover by industry subgroup between January 2020 and May 2025, summed across all Australian states.
+
+Cafes, restaurants and catering services recorded the strongest growth over the period, consistent with the recovery of dining and hospitality following COVID-19 restrictions. Takeaway food services also showed strong gains, reflecting sustained demand for convenient dining options. Pharmaceutical, cosmetic and toiletry goods retailing grew steadily, driven by continued consumer spending on health and personal care.
+
+In contrast, newspaper and book retailing recorded the sharpest decline, continuing a long-run structural trend driven by digital substitution. Department stores also contracted, reflecting ongoing pressure from online retail and shifting consumer preferences.
+
+Hardware, building and garden supplies showed moderate growth, likely supported by the pandemic-era home improvement boom. Supermarket and grocery stores maintained steady positive growth throughout the period, underpinned by consistent household demand.
+
+Overall, food services and health-related retail were the primary drivers of post-pandemic growth, while print-based and discretionary retail continued to decline.
+
+```{r}
+#| label: fig-growth
+#| fig-cap: "Percentage change in total retail turnover by industry subgroup, January 2020 to May 2025 (seasonally adjusted, AUD millions). Industries ranked by growth rate."
+#| fig-width: 8
+#| fig-height: 5
+#| include: true
+
+growth_data <- retail_clean |>
+  filter(
+    Month %in% as.Date(c("2020-01-01", "2025-05-01")),
+    !Industry %in% c(
+      "Food retailing",
+      "Household goods retailing",
+      "Clothing, footwear and personal accessory retailing",
+      "Cafes, restaurants and takeaway food services",
+      "Other retailing"
+    )
+  ) |>
+  mutate(period = ifelse(Month == as.Date("2020-01-01"), "start", "end")) |>
+  group_by(Industry, period) |>
+  summarise(total = sum(Turnover, na.rm = TRUE), .groups = "drop") |>
+  pivot_wider(names_from = period, values_from = total) |>
+  mutate(
+    pct_change = ((end - start) / start) * 100,
+    Industry = str_wrap(Industry, 35)
+  ) |>
+  filter(!is.na(pct_change))
+
+ggplot(
+  growth_data,
+  aes(x = pct_change, y = reorder(Industry, pct_change), fill = pct_change > 0)
+) +
+  geom_col(show.legend = FALSE) +
+  scale_fill_manual(values = c("TRUE" = "#2c7bb6", "FALSE" = "#d7191c")) +
+  labs(x = "Percentage Change (%)", y = NULL) +
+  theme_minimal() +
+  theme(
+    axis.text.y = element_text(size = 8),
+    panel.grid.major.y = element_blank()
+  )
+```
 
 # Discussion and Conclusion
 
