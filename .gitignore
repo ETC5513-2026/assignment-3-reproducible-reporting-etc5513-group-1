@@ -27,3 +27,6 @@
 
 # Logs
 *.log
+figures/
+reports/figures/
+data/~
