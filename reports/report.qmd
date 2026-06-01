@@ -56,12 +56,13 @@ All visualisations were produced using ggplot2 and tables were rendered with kni
 library(readxl)
 library(tidyverse)
 library(knitr)
+library(here)
 
 # Read raw data without column names
-retail_raw <- read_excel(
-  "../data/Retail turnover, state by industry subgroup, seasonally adjusted.xlsx",
-  sheet = "Data1",
-  col_names = FALSE
+retail_raw <- read_csv(
+  here::here("data/Retail turnover, state by industry subgroup, seasonally adjusted.csv"),
+  col_names = FALSE,
+  show_col_types = FALSE
 )
 
 # Extract series names from first row
@@ -74,14 +75,14 @@ series_names <- retail_raw[1, -1] |>
 
 # Clean and reshape data
 retail_clean <- retail_raw[-(1:10), ] |>
-  rename(Month = ...1) |>
+  rename(Month = X1) |>
   pivot_longer(
     cols = -Month,
     names_to = "series_col",
     values_to = "Turnover"
   ) |>
   mutate(
-    series_index = as.integer(str_remove(series_col, "\\.\\.\\.")) - 1,
+    series_index = as.integer(str_remove(series_col, "X")) - 1,
     series = series_names[series_index],
     Month = as.Date(as.numeric(Month), origin = "1899-12-30"),
     Turnover = as.numeric(Turnover)
@@ -215,6 +216,55 @@ ggplot(
   )
 ```
 
-# Discussion and Conclusion
+# Discussion, conclusion and recommendations
+
+**Discussion**
+
+The results reveal a clear bifurcation in Australian retail performance between 2020 and 2025. Food services — particularly cafes, restaurants, and takeaway — emerged as the strongest growth segment, as shown in Figure 2, with cafes and restaurants recording approximately 50% growth over the period. This recovery reflects pent-up consumer demand following prolonged COVID-19 dining restrictions, as well as a structural shift toward experience-based spending once lockdowns lifted. The sustained growth in pharmaceutical, cosmetic, and toiletry goods retailing similarly reflects a lasting behavioural legacy of the pandemic, with heightened consumer attention to personal health and hygiene driving ongoing demand.
+
+In contrast, newspaper and book retailing recorded the sharpest decline of approximately 20%, continuing a long-run structural trend driven by digital substitution that predates the pandemic. Department stores also contracted, reflecting compounding pressures from the growth of online retail platforms and shifting consumer preferences away from traditional discretionary retail formats. These segments are unlikely to recover without significant business model transformation.
+
+The dominance of New South Wales, Victoria, and Queensland in absolute turnover (Table 1) is consistent with their population size. However, Western Australia's relative strength in growth rates warrants attention, potentially reflecting its earlier economic recovery and resource-sector-driven income growth during this period.
+
+**Conclusion**
+
+As shown in @fig-state-growth, Victoria and Western Australia recorded the strongest growth rates among all states.
+
+This analysis of seasonally adjusted ABS retail turnover data from January 2020 to May 2025 demonstrates that post-pandemic retail recovery in Australia has been uneven but directionally clear. Food services and health-related retail are the primary growth industries, while print media retail and traditional department stores face ongoing structural decline. Victoria and Western Australia recorded some of the strongest state-level growth, suggesting regional variation in recovery pace driven by differing reopening timelines and economic conditions.
+
+```{r}
+#| label: fig-state-growth
+#| fig-cap: "Percentage change in total retail turnover by state, January 2020 to May 2025 (seasonally adjusted, AUD millions)."
+#| fig-width: 7
+#| fig-height: 4
+#| include: true
+
+retail_clean |>
+  filter(Month %in% as.Date(c("2020-01-01", "2025-05-01"))) |>
+  mutate(period = ifelse(Month == as.Date("2020-01-01"), "start", "end")) |>
+  group_by(State, period) |>
+  summarise(total = sum(Turnover, na.rm = TRUE), .groups = "drop") |>
+  pivot_wider(names_from = period, values_from = total) |>
+  mutate(pct_change = ((end - start) / start) * 100) |>
+  ggplot(aes(x = pct_change, y = reorder(State, pct_change), fill = pct_change)) +
+  geom_col(show.legend = FALSE) +
+  scale_fill_gradient(low = "#abd9e9", high = "#2c7bb6") +
+  labs(x = "Percentage Change (%)", y = NULL) +
+  theme_minimal() +
+  theme(
+    axis.text.y = element_text(size = 9),
+    panel.grid.major.y = element_blank()
+  )
+```
+
+**Recommendations**
+
+For Businesses and Investors: Capital allocation should prioritise food services, pharmaceutical retailing, and personal care sectors when considering retail expansion in Australia, as these segments demonstrate the strongest and most sustained post-pandemic growth trajectories.
+
+For Policymakers: Support programs targeting structurally declining sectors such as newspaper and book retailing should account for the long-run digital substitution trend rather than treating decline as a purely pandemic-driven phenomenon. Targeted transition assistance may be more effective than recovery-focused interventions.
+
+For Future Research: Longitudinal analysis extending beyond 2025 would help distinguish pandemic recovery effects from underlying structural trends. State-level decomposition of growth drivers — separating population growth, real income effects, and behavioural change — would provide more granular policy-relevant insights.
 
 # References
+
+Data were obtained from the Australian Bureau of Statistics [@abs_retail_2025].
