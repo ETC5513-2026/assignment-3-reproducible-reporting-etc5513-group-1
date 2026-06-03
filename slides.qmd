@@ -1,0 +1,54 @@
+---
+format:
+  revealjs:
+    theme: simple
+    slide-number: true
+    transition: fade
+    center: false
+execute:
+  echo: false
+  warning: false
+  message: false
+---
+
+## Retail Sector Performance Across Australian States
+
+### Identifying Growth Industries in the Post-Pandemic Era (2020–2025)
+
+<br>
+
+Shixu Xiao
+
+Anali Nanayakkara Palliya Guruge
+
+Tiansi Zhu
+
+Sum Yee Chong
+
+---
+
+## Problem Introduction: Why Retail Recovery Matters
+
+- COVID-19 substantially disrupted Australia's retail sector.
+
+- Lockdowns and mobility restrictions changed consumer spending behaviour.
+
+- Retail recovery has not occurred uniformly across Australian states and industries.
+
+- Understanding these differences is important for businesses, investors, and policymakers.
+
+---
+
+## Research Focus
+
+### Dataset
+
+- Australian Bureau of Statistics (ABS) Retail Trade data
+
+- Seasonally adjusted retail turnover
+
+- January 2020 – May 2025
+
+### Objective
+
+Identify patterns of post-pandemic retail recovery across industries and regions.
