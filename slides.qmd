@@ -10,7 +10,54 @@ execute:
   warning: false
   message: false
 ---
+```{r}
+#| label: setup
+#| include: false
 
+library(tidyverse)
+library(knitr)
+library(here)
+library(kableExtra)
+
+# Read raw data
+retail_raw <- read_csv(
+  here::here("data/Retail turnover, state by industry subgroup, seasonally adjusted.csv"),
+  col_names = FALSE,
+  show_col_types = FALSE
+)
+
+# Extract series names from first row
+series_names <- retail_raw[1, -1] |>
+  pivot_longer(cols = everything(), values_to = "series") |>
+  pull(series)
+
+# Clean and reshape data
+retail_clean <- retail_raw[-(1:10), ] |>
+  rename(Month = X1) |>
+  pivot_longer(cols = -Month, names_to = "series_col", values_to = "Turnover") |>
+  mutate(
+    series_index = as.integer(str_remove(series_col, "X")) - 1,
+    series = series_names[series_index],
+    Month = as.Date(as.numeric(Month), origin = "1899-12-30"),
+    Turnover = as.numeric(Turnover)
+  ) |>
+  separate(series, into = c("Measure", "State", "Industry"), sep = ";", fill = "right") |>
+  mutate(
+    across(c(Measure, State, Industry), str_trim),
+    Industry = str_replace(
+      Industry,
+      "Furniture, floor coverings, houseware and textile goods retailing",
+      "Furniture and houseware retailing"
+    )
+  ) |>
+  filter(
+    Month >= as.Date("2020-01-01"),
+    Month <= as.Date("2025-05-01"),
+    !str_detect(State, "Total"),
+    !str_detect(Industry, "Total"),
+    !is.na(Turnover)
+  )
+```
 ## Retail Sector Performance Across Australian States
 
 ### Identifying Growth Industries in the Post-Pandemic Era (2020–2025)
@@ -52,3 +99,23 @@ Sum Yee Chong
 ### Objective
 
 Identify patterns of post-pandemic retail recovery across industries and regions.
+
+## Methodology: Data Preparation {.smaller}
+
+- Covers all **8 states and territories**, multiple industry subgroups
+- CSV imported in wide format, pivoted to long format using `tidyverse`
+- State and industry identifiers separated using `separate()`
+- Aggregate totals and missing values excluded
+
+```{r}
+#| label: tbl-summary
+#| echo: false
+
+retail_clean |>
+  group_by(State, Industry) |>
+  summarise(average_turnover = round(mean(Turnover, na.rm = TRUE), 1), .groups = "drop") |>
+  arrange(desc(average_turnover)) |>
+  head(10) |>
+  kable(col.names = c("State", "Industry", "Avg Turnover ($M)")) |>
+  kableExtra::kable_styling(font_size = 11)
+```
