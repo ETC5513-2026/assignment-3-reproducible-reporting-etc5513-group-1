@@ -109,6 +109,7 @@ Identify patterns of post-pandemic retail recovery across industries and regions
 
 ```{r}
 #| label: tbl-summary
+#| tbl-cap: "Top 10 state-industry combinations by average monthly retail turnover, 2020–2025 (AUD millions, seasonally adjusted)"
 #| echo: false
 
 retail_clean |>
@@ -119,3 +120,34 @@ retail_clean |>
   kable(col.names = c("State", "Industry", "Avg Turnover ($M)")) |>
   kableExtra::kable_styling(font_size = 11)
 ```
+## Methodology: Analytical Approach {.smaller}
+
+- Percentage change calculated from **January 2020 to May 2025** to measure growth
+- Analysis focuses on both **state-level** and **industry-level** patterns
+- Visualisations produced using `ggplot2`; tables rendered with `knitr`
+
+```{r}
+#| label: fig-trend
+#| fig-cap: "Monthly retail turnover across selected industries in Australia, January 2020 to May 2025 (seasonally adjusted, AUD millions)"
+#| echo: false
+#| fig-width: 9
+#| fig-height: 2.8
+
+retail_clean |>
+  filter(Industry %in% c(
+    "Supermarket and grocery stores",
+    "Cafes, restaurants and takeaway food services",
+    "Clothing, footwear and personal accessory retailing"
+  )) |>
+  group_by(Month, Industry) |>
+  summarise(Turnover = sum(Turnover), .groups = "drop") |>
+  ggplot(aes(x = Month, y = Turnover, colour = Industry)) +
+  geom_line(linewidth = 0.8) +
+  facet_wrap(~ Industry, scales = "free_y") +
+  labs(x = "Date", y = "Turnover ($ Millions)") +
+  theme_minimal() +
+  theme(legend.position = "none", strip.text = element_text(size = 7))
+```
+
+
+
