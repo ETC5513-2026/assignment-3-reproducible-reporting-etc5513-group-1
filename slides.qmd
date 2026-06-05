@@ -195,13 +195,12 @@ ggplot(
   )
 ```
 ---
-
-## Results: Key Takeaways
+## Results: Key Takeaways {.smaller}
 
 - Food services and health-related retail were the **primary drivers of post-pandemic growth**
-- Newspaper and book retailing and department stores face **ongoing structural decline** unlikely to reverse without significant business model transformation
-- Supermarket and grocery stores maintained **steady positive growth**, underpinned by consistent household demand
-- Hardware and building supplies showed **moderate growth**, supported by the pandemic-era home improvement boom
-- Overall, the divide between experience and health-related retail versus traditional discretionary retail is the defining pattern of the period
+- Newspaper and book retailing and department stores face **ongoing structural decline**
+- Supermarket and grocery stores maintained **steady positive growth** throughout the period
+- Hardware and building supplies showed **moderate growth**, driven by the home improvement boom
+- Clear divide between **experience-based retail** (growing) and **traditional discretionary retail** (declining)
 
 
