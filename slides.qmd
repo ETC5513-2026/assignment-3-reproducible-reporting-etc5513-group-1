@@ -149,5 +149,59 @@ retail_clean |>
   theme(legend.position = "none", strip.text = element_text(size = 7))
 ```
 
+## Results: Industry Growth Since 2020 {.smaller}
+
+Food services led recovery; newspaper and book retailing continued structural decline.
+
+```{r}
+#| label: fig-growth
+#| fig-cap: "Percentage change in total retail turnover by industry subgroup, January 2020 to May 2025 (seasonally adjusted, AUD millions). Industries ranked by growth rate."
+#| echo: false
+#| fig-width: 11
+#| fig-height: 6.5
+
+growth_data <- retail_clean |>
+  filter(
+    Month %in% as.Date(c("2020-01-01", "2025-05-01")),
+    !Industry %in% c(
+      "Food retailing",
+      "Household goods retailing",
+      "Clothing, footwear and personal accessory retailing",
+      "Cafes, restaurants and takeaway food services",
+      "Other retailing"
+    )
+  ) |>
+  mutate(period = ifelse(Month == as.Date("2020-01-01"), "start", "end")) |>
+  group_by(Industry, period) |>
+  summarise(total = sum(Turnover, na.rm = TRUE), .groups = "drop") |>
+  pivot_wider(names_from = period, values_from = total) |>
+  mutate(
+    pct_change = ((end - start) / start) * 100,
+    Industry = str_wrap(Industry, 35)
+  ) |>
+  filter(!is.na(pct_change))
+
+ggplot(
+  growth_data,
+  aes(x = pct_change, y = reorder(Industry, pct_change), fill = pct_change > 0)
+) +
+  geom_col(show.legend = FALSE) +
+  scale_fill_manual(values = c("TRUE" = "#2c7bb6", "FALSE" = "#d7191c")) +
+  labs(x = "Percentage Change (%)", y = NULL) +
+  theme_minimal(base_size = 14) +
+  theme(
+    axis.text.y = element_text(size = 10),
+    panel.grid.major.y = element_blank()
+  )
+```
+---
+
+## Results: Key Takeaways
+
+- Food services and health-related retail were the **primary drivers of post-pandemic growth**
+- Newspaper and book retailing and department stores face **ongoing structural decline** unlikely to reverse without significant business model transformation
+- Supermarket and grocery stores maintained **steady positive growth**, underpinned by consistent household demand
+- Hardware and building supplies showed **moderate growth**, supported by the pandemic-era home improvement boom
+- Overall, the divide between experience and health-related retail versus traditional discretionary retail is the defining pattern of the period
 
 

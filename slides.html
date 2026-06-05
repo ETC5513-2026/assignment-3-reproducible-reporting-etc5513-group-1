@@ -123,6 +123,8 @@
       margin-right: 0; 
     }
   </style>
+  <script src="slides_files/libs/kePrint-0.0.1/kePrint.js"></script>
+  <link href="slides_files/libs/lightable-0.0.1/lightable.css" rel="stylesheet">
 </head>
 <body class="quarto-light">
   <div class="reveal">
@@ -157,6 +159,117 @@
 </ul>
 <h3 id="objective">Objective</h3>
 <p>Identify patterns of post-pandemic retail recovery across industries and regions.</p>
+</section>
+<section id="methodology-data-preparation" class="slide level2 smaller">
+<h2>Methodology: Data Preparation</h2>
+<ul>
+<li>Covers all <strong>8 states and territories</strong>, multiple industry subgroups</li>
+<li>CSV imported in wide format, pivoted to long format using <code>tidyverse</code></li>
+<li>State and industry identifiers separated using <code>separate()</code></li>
+<li>Aggregate totals and missing values excluded</li>
+</ul>
+<div class="cell">
+<div id="tbl-summary" class="cell quarto-float quarto-figure quarto-figure-center">
+<figure class="quarto-float quarto-float-tbl">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-summary-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;1: Top 10 state-industry combinations by average monthly retail turnover, 2020–2025 (AUD millions, seasonally adjusted)
+</figcaption>
+<div aria-describedby="tbl-summary-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="cell-output-display">
+<table class="table cell caption-top" style="font-size: 11px; margin-left: auto; margin-right: auto;">
+<thead>
+<tr class="header">
+<th style="text-align: left;" data-quarto-table-cell-role="th">State</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">Industry</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">Avg Turnover ($M)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">New South Wales</td>
+<td style="text-align: left;">Food retailing</td>
+<td style="text-align: right;">4102.1</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Victoria</td>
+<td style="text-align: left;">Food retailing</td>
+<td style="text-align: right;">3356.2</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">New South Wales</td>
+<td style="text-align: left;">Supermarket and grocery stores</td>
+<td style="text-align: right;">3338.0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Queensland</td>
+<td style="text-align: left;">Food retailing</td>
+<td style="text-align: right;">2915.5</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Victoria</td>
+<td style="text-align: left;">Supermarket and grocery stores</td>
+<td style="text-align: right;">2776.3</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Queensland</td>
+<td style="text-align: left;">Supermarket and grocery stores</td>
+<td style="text-align: right;">2397.3</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">New South Wales</td>
+<td style="text-align: left;">Household goods retailing</td>
+<td style="text-align: right;">1789.2</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">New South Wales</td>
+<td style="text-align: left;">Other retailing</td>
+<td style="text-align: right;">1562.5</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Victoria</td>
+<td style="text-align: left;">Household goods retailing</td>
+<td style="text-align: right;">1523.9</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Western Australia</td>
+<td style="text-align: left;">Food retailing</td>
+<td style="text-align: right;">1510.7</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</figure>
+</div>
+</div>
+</section>
+<section id="methodology-analytical-approach" class="slide level2 smaller">
+<h2>Methodology: Analytical Approach</h2>
+<ul>
+<li>Percentage change calculated from <strong>January 2020 to May 2025</strong> to measure growth</li>
+<li>Analysis focuses on both <strong>state-level</strong> and <strong>industry-level</strong> patterns</li>
+<li>Visualisations produced using <code>ggplot2</code>; tables rendered with <code>knitr</code></li>
+</ul>
+
+<img data-src="slides_files/figure-revealjs/fig-trend-1.png" width="864" class="r-stretch quarto-figure-center" id="fig-trend"><p class="caption">
+Figure&nbsp;1: Monthly retail turnover across selected industries in Australia, January 2020 to May 2025 (seasonally adjusted, AUD millions)
+</p></section>
+<section id="results-industry-growth-since-2020" class="slide level2 smaller">
+<h2>Results: Industry Growth Since 2020</h2>
+<p>Food services led recovery; newspaper and book retailing continued structural decline.</p>
+
+<img data-src="slides_files/figure-revealjs/fig-growth-1.png" width="1056" class="r-stretch quarto-figure-center" id="fig-growth"><p class="caption">
+Figure&nbsp;2: Percentage change in total retail turnover by industry subgroup, January 2020 to May 2025 (seasonally adjusted, AUD millions). Industries ranked by growth rate.
+</p></section>
+<section id="results-key-takeaways" class="slide level2">
+<h2>Results: Key Takeaways</h2>
+<ul>
+<li>Food services and health-related retail were the <strong>primary drivers of post-pandemic growth</strong></li>
+<li>Newspaper and book retailing and department stores face <strong>ongoing structural decline</strong> unlikely to reverse without significant business model transformation</li>
+<li>Supermarket and grocery stores maintained <strong>steady positive growth</strong>, underpinned by consistent household demand</li>
+<li>Hardware and building supplies showed <strong>moderate growth</strong>, supported by the pandemic-era home improvement boom</li>
+<li>Overall, the divide between experience and health-related retail versus traditional discretionary retail is the defining pattern of the period</li>
+</ul>
 
 </section>
     </div>
@@ -374,6 +487,44 @@
         ]
       });
     </script>
+    
+    <script>
+      // htmlwidgets need to know to resize themselves when slides are shown/hidden.
+      // Fire the "slideenter" event (handled by htmlwidgets.js) when the current
+      // slide changes (different for each slide format).
+      (function () {
+        // dispatch for htmlwidgets
+        function fireSlideEnter() {
+          const event = window.document.createEvent("Event");
+          event.initEvent("slideenter", true, true);
+          window.document.dispatchEvent(event);
+        }
+
+        function fireSlideChanged(previousSlide, currentSlide) {
+          fireSlideEnter();
+
+          // dispatch for shiny
+          if (window.jQuery) {
+            if (previousSlide) {
+              window.jQuery(previousSlide).trigger("hidden");
+            }
+            if (currentSlide) {
+              window.jQuery(currentSlide).trigger("shown");
+            }
+          }
+        }
+
+        // hookup for slidy
+        if (window.w3c_slidy) {
+          window.w3c_slidy.add_observer(function (slide_num) {
+            // slide_num starts at position 1
+            fireSlideChanged(null, w3c_slidy.slides[slide_num - 1]);
+          });
+        }
+
+      })();
+    </script>
+
     <script id="quarto-html-after-body" type="application/javascript">
       window.document.addEventListener("DOMContentLoaded", function (event) {
         const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
