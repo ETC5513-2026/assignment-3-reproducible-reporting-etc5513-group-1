@@ -202,5 +202,86 @@ ggplot(
 - Supermarket and grocery stores maintained **steady positive growth** throughout the period
 - Hardware and building supplies showed **moderate growth**, driven by the home improvement boom
 - Clear divide between **experience-based retail** (growing) and **traditional discretionary retail** (declining)
-
-
+ 
+## Discussion & Conclusion {.smaller}
+ 
+:::: {.columns}
+ 
+::: {.column width="50%"}
+ 
+**Discussion**
+ 
+- **Food services** led growth at approx. 50% -- pent-up demand and shift to experience-based spending
+- **Pharmaceutical and personal care retailing** grew steadily, driven by lasting health consciousness
+- **Newspaper and book retailing** fell approx. 20% due to long-run digital substitution
+- **Department stores** contracted under pressure from online retail
+ 
+:::
+ 
+::: {.column width="50%"}
+ 
+**Conclusion**
+ 
+- Recovery is **uneven but directionally clear**
+- Food services and health-related retail are the **primary growth sectors**
+- Print and department retail face **ongoing structural decline**
+- **Victoria and WA** recorded the strongest state-level growth
+ 
+:::
+ 
+::::
+ 
+## Recommendations {.smaller}
+ 
+:::: {.columns}
+ 
+::: {.column width="45%"}
+ 
+```{r}
+#| label: fig-state-growth-rec
+#| fig-width: 4.5
+#| fig-height: 3.8
+#| echo: false
+ 
+retail_clean |>
+  filter(Month %in% as.Date(c("2020-01-01", "2025-05-01"))) |>
+  mutate(period = ifelse(Month == as.Date("2020-01-01"), "start", "end")) |>
+  group_by(State, period) |>
+  summarise(total = sum(Turnover, na.rm = TRUE), .groups = "drop") |>
+  pivot_wider(names_from = period, values_from = total) |>
+  mutate(pct_change = ((end - start) / start) * 100) |>
+  ggplot(aes(x = pct_change, y = reorder(State, pct_change), fill = pct_change)) +
+  geom_col(show.legend = FALSE) +
+  scale_fill_gradient(low = "#abd9e9", high = "#2c7bb6") +
+  labs(x = "Percentage Change (%)", y = NULL,
+       title = "Growth by State (2020-2025)") +
+  theme_minimal(base_size = 11) +
+  theme(
+    axis.text.y = element_text(size = 9),
+    panel.grid.major.y = element_blank()
+  )
+```
+ 
+:::
+ 
+::: {.column width="55%"}
+ 
+**For Businesses and Investors**
+ 
+Prioritise food services, pharmaceutical and personal care sectors -- strongest and most sustained growth trends.
+ 
+**For Policymakers**
+ 
+Support declining sectors (newspaper/book retailing) with **transition assistance**, not recovery interventions -- decline is structural, not pandemic-driven.
+ 
+**For Future Research**
+ 
+Longitudinal analysis beyond 2025 to separate recovery effects from structural trends; state-level decomposition of growth drivers.
+ 
+:::
+ 
+::::
+ 
+## References
+ 
+Australian Bureau of Statistics (2025). *Retail Trade, Australia: Table 12 -- Retail Turnover, State by Industry Subgroup, Seasonally Adjusted.* Available at: https://www.abs.gov.au/statistics/industry/retail-and-wholesale-trade/retail-trade-australia/may-2025
