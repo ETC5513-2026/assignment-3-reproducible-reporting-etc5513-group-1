@@ -52,6 +52,7 @@ This project uses:
 - Quarto for reporting and presentation
 - Git and GitHub for version control
 - `renv` for package management and reproducibility
+- `.gitignore` to exclude unnecessary generated files and temporary files from version control
 
 To restore the project environment:
 
